@@ -1,6 +1,6 @@
 # Turniej Gier BergusF edycja 3
 
-Turniej Gier BergusF to responsywny overlay do prowadzenia gamingowego teleturnieju na streamie. Projekt jest inspirowany turniejem o grach „Grafa” youtubera Grafa, ale nie kopiuje go bezpośrednio: tworzy własną, czarno-czerwoną wersję oprawy z neonowym klimatem, pikselowymi ramkami i estetyką sceny esportowej.
+Turniej Gier BergusF to responsywny overlay do prowadzenia gamingowego teleturnieju dla znajomych na discord. Projekt jest inspirowany turniejem o grach „Grafa” youtubera Grafa, ale nie kopiuje go bezpośrednio: tworzy własną, czarno-czerwoną wersję oprawy z neonowym klimatem, pikselowymi ramkami i estetyką sceny esportowej.
 
 Strona została pomyślana jako gotowy ekran do OBS-a lub przeglądarki pokazanej na transmisji. Z boku są drużyny, gracze, kamerki i duże wyniki, a w centrum pojawia się aktualny etap gry. Wszystko można kontrolować z panelu administratora, a zmiany od razu zapisują się lokalnie i są widoczne na overlayu.
 
