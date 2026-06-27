@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Press+Start+2P&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  background: #050407;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: #fff5f5;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 23, 23, 0.24), transparent 34rem),
+    radial-gradient(circle at 12% 72%, rgba(118, 0, 13, 0.45), transparent 28rem),
+    linear-gradient(135deg, #050407 0%, #100006 48%, #050407 100%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.pixel-corners {
+  clip-path: polygon(
+    0 10px,
+    10px 10px,
+    10px 0,
+    calc(100% - 10px) 0,
+    calc(100% - 10px) 10px,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    10px calc(100% - 10px),
+    0 calc(100% - 10px)
+  );
+}
+
+.grid-glow {
+  background-image:
+    linear-gradient(rgba(255, 23, 23, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 23, 23, 0.08) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.admin-input {
+  @apply w-full rounded-md border border-blood-800/70 bg-black/60 px-3 py-2 text-sm text-white outline-none transition focus:border-blood-400 focus:shadow-neon;
+}
+
+.admin-label {
+  @apply mb-2 block text-xs font-black uppercase tracking-[0.16em] text-red-200/70;
+}
