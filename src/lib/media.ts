@@ -1,8 +1,10 @@
 export const normalizeMediaUrl = (value: string) => {
-  const url = value.trim();
+  let url = value.trim().replace(/\\/g, '/');
   if (!url) return '';
+  url = url.replace(/^\.?\/?public\//i, '/');
   if (/^(https?:|data:|blob:|file:)/i.test(url)) return url;
   if (url.startsWith('//')) return `https:${url}`;
+  if (url.startsWith('/')) return url;
   if (/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(url)) return `https://${url}`;
   return url;
 };
@@ -41,6 +43,43 @@ export const getVideoEmbedUrl = (value: string) => {
   }
 
   return '';
+};
+
+export const getImageEmbedUrl = (value: string) => {
+  const url = normalizeMediaUrl(value);
+  if (!url) return '';
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '');
+
+    if (host === 'imgur.com' && (parsed.pathname.startsWith('/a/') || parsed.pathname.startsWith('/gallery/'))) {
+      return `${url.replace(/\/$/, '')}/embed`;
+    }
+  } catch {
+    return '';
+  }
+
+  return '';
+};
+
+export const getDirectImageUrl = (value: string) => {
+  const url = normalizeMediaUrl(value);
+  if (!url) return '';
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '');
+    const pathParts = parsed.pathname.split('/').filter(Boolean);
+
+    if (host === 'imgur.com' && pathParts.length === 1 && !/\.(jpg|jpeg|png|gif|webp)$/i.test(pathParts[0])) {
+      return `https://i.imgur.com/${pathParts[0]}.jpg`;
+    }
+  } catch {
+    return url;
+  }
+
+  return url;
 };
 
 export const isDirectVideoUrl = (value: string) => /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(normalizeMediaUrl(value));

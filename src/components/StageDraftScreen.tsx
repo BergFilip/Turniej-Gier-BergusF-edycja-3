@@ -1,4 +1,4 @@
-import { normalizeMediaUrl } from '../lib/media';
+import { getDirectImageUrl, normalizeMediaUrl } from '../lib/media';
 import type { StageDraft, Team } from '../store/gameStore';
 import { PixelFrame } from './PixelFrame';
 
@@ -76,7 +76,7 @@ export const StageDraftScreen = ({ draft, leftTeam, rightTeam }: StageDraftScree
             const ownedByRight = card.owner === 'right';
             const isBanned = card.status === 'banned';
             const isPicked = card.status === 'picked';
-            const imageUrl = normalizeMediaUrl(card.imageUrl);
+            const imageUrl = getDirectImageUrl(normalizeMediaUrl(card.imageUrl));
 
             return (
               <div

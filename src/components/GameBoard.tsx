@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { getBingoSummary } from '../lib/stageGridRules';
 import { useGameStore } from '../store/gameStore';
+import { HostCameraPanel } from './HostCameraPanel';
 import { QuestionScreen } from './QuestionScreen';
 import { ScoreBar } from './ScoreBar';
 import { StageSideStats } from './StageSideStats';
@@ -25,6 +26,9 @@ export const GameBoard = () => {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-blood-500/20 to-transparent" />
       <div className="pointer-events-none absolute inset-0 opacity-30">
         <div className="h-full w-full animate-scan bg-gradient-to-b from-transparent via-blood-400/10 to-transparent" />
+      </div>
+      <div className="absolute left-3 top-24 z-20 hidden w-[22rem] xl:block">
+        <HostCameraPanel cameraUrl={state.hostCamera} />
       </div>
       <div className="relative mx-auto flex min-h-[calc(100vh-24px)] max-w-[1800px] flex-col gap-4 sm:min-h-[calc(100vh-40px)]">
         <ScoreBar

@@ -92,8 +92,15 @@ export type StageDraft = {
   cards: StageDraftCard[];
 };
 
+export type AdminAnswerNote = {
+  id: string;
+  questionLabel: string;
+  answer: string;
+};
+
 export type GameState = {
   header: string;
+  hostCamera: string;
   round: number;
   questionNumber: number;
   timerSeconds: number;
@@ -108,6 +115,7 @@ export type GameState = {
   stageGrid: StageGrid;
   stageHints: StageHints;
   stageDraft: StageDraft;
+  adminNotes: AdminAnswerNote[];
   leftTeam: Team;
   rightTeam: Team;
 };
@@ -159,6 +167,10 @@ type GameStore = GameState & {
   nextQuestion: () => void;
   toggleActiveTeam: () => void;
   showCorrect: () => void;
+  addAdminNote: () => void;
+  updateAdminNote: (noteId: string, data: Partial<AdminAnswerNote>) => void;
+  removeAdminNote: (noteId: string) => void;
+  clearAdminNotes: () => void;
   resetGame: () => void;
   hydrateFromStorage: () => void;
 };
@@ -234,6 +246,7 @@ const normalizeStageHints = (current: StageHints, persisted?: LegacyStageHints):
 const mergeGameState = <T extends GameState>(current: T, state: Partial<GameState>) => ({
   ...current,
   ...state,
+  hostCamera: state.hostCamera ?? current.hostCamera,
   mode:
     state.mode === 'grid' || state.mode === 'hints' || state.mode === 'draft' || state.mode === 'final'
       ? state.mode
@@ -275,6 +288,7 @@ const mergeGameState = <T extends GameState>(current: T, state: Partial<GameStat
     },
   },
   stageHints: normalizeStageHints(current.stageHints, state.stageHints as LegacyStageHints | undefined),
+  adminNotes: Array.isArray(state.adminNotes) ? state.adminNotes : current.adminNotes,
   stageDraft: {
     ...current.stageDraft,
     ...state.stageDraft,
@@ -742,6 +756,26 @@ export const useGameStore = create<GameStore>()(
       toggleActiveTeam: () =>
         set((state) => ({ activeTeam: state.activeTeam === 'left' ? 'right' : 'left' })),
       showCorrect: () => set({ revealCorrect: true }),
+      addAdminNote: () =>
+        set((state) => ({
+          adminNotes: [
+            ...state.adminNotes,
+            {
+              id: `note-${Date.now()}-${state.adminNotes.length}`,
+              questionLabel: '',
+              answer: '',
+            },
+          ],
+        })),
+      updateAdminNote: (noteId, data) =>
+        set((state) => ({
+          adminNotes: state.adminNotes.map((note) => (note.id === noteId ? { ...note, ...data } : note)),
+        })),
+      removeAdminNote: (noteId) =>
+        set((state) => ({
+          adminNotes: state.adminNotes.filter((note) => note.id !== noteId),
+        })),
+      clearAdminNotes: () => set({ adminNotes: [] }),
       resetGame: () =>
         set({
           ...defaultGameState,
@@ -763,6 +797,7 @@ export const useGameStore = create<GameStore>()(
       name: STORAGE_KEY,
       partialize: (state) => ({
         header: state.header,
+        hostCamera: state.hostCamera,
         round: state.round,
         questionNumber: state.questionNumber,
         timerSeconds: state.timerSeconds,
@@ -777,6 +812,7 @@ export const useGameStore = create<GameStore>()(
         stageGrid: state.stageGrid,
         stageHints: state.stageHints,
         stageDraft: state.stageDraft,
+        adminNotes: state.adminNotes,
         leftTeam: state.leftTeam,
         rightTeam: state.rightTeam,
       }),

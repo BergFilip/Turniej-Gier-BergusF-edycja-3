@@ -119,6 +119,15 @@ export const AdminPanel = () => {
                       <option value="final">Punktacja końcowa</option>
                     </select>
                   </label>
+                  <label className="md:col-span-2">
+                    <span className="admin-label">Kamera prowadzącego URL</span>
+                    <input
+                      className="admin-input"
+                      value={state.hostCamera}
+                      placeholder="VDO Ninja, /media/kamera.mp4 albo URL obrazka"
+                      onChange={(event) => state.setField('hostCamera', event.target.value)}
+                    />
+                  </label>
                 </div>
               </section>
             </PixelFrame>
@@ -821,6 +830,65 @@ export const AdminPanel = () => {
                   <ActionButton onClick={state.resetGame} variant="danger">
                     <RefreshCcw className="h-4 w-4" /> Reset gry
                   </ActionButton>
+                </div>
+              </section>
+            </PixelFrame>
+
+            <PixelFrame>
+              <section className="p-5">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <SectionTitle>Notatnik odpowiedzi</SectionTitle>
+                  <button
+                    type="button"
+                    onClick={state.addAdminNote}
+                    className="inline-flex min-h-9 items-center justify-center rounded-md border border-blood-800 bg-black/55 px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-red-100 transition hover:border-blood-400 hover:shadow-neon"
+                  >
+                    <Plus className="h-4 w-4" /> Dodaj
+                  </button>
+                </div>
+                <div className="grid gap-3">
+                  {state.adminNotes.length === 0 && (
+                    <div className="border border-blood-900/80 bg-black/35 p-4 text-center text-xs font-black uppercase tracking-[0.14em] text-red-200/60">
+                      Brak zapisanych odpowiedzi
+                    </div>
+                  )}
+                  {state.adminNotes.map((note, index) => (
+                    <div key={note.id} className="grid gap-3 border border-blood-900/80 bg-black/35 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-pixel text-sm text-blood-400">#{index + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => state.removeAdminNote(note.id)}
+                          className="inline-flex min-h-8 items-center justify-center rounded-md border border-red-900 bg-red-950/50 px-2 text-[10px] font-black uppercase tracking-[0.12em] text-red-100 transition hover:border-blood-400"
+                        >
+                          <Minus className="h-4 w-4" /> Usuń
+                        </button>
+                      </div>
+                      <label>
+                        <span className="admin-label">Które pytanie</span>
+                        <input
+                          className="admin-input"
+                          value={note.questionLabel}
+                          placeholder="np. Etap 1 / Minecraft / 200"
+                          onChange={(event) => state.updateAdminNote(note.id, { questionLabel: event.target.value })}
+                        />
+                      </label>
+                      <label>
+                        <span className="admin-label">Odpowiedź</span>
+                        <textarea
+                          className="admin-input min-h-24 resize-y"
+                          value={note.answer}
+                          placeholder="Tu wpisz poprawną odpowiedź albo własną notatkę"
+                          onChange={(event) => state.updateAdminNote(note.id, { answer: event.target.value })}
+                        />
+                      </label>
+                    </div>
+                  ))}
+                  {state.adminNotes.length > 0 && (
+                    <ActionButton onClick={state.clearAdminNotes} variant="danger">
+                      <RefreshCcw className="h-4 w-4" /> Wyczyść notatki
+                    </ActionButton>
+                  )}
                 </div>
               </section>
             </PixelFrame>
